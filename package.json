@@ -17,5 +17,8 @@
   "license": "UNLICENSE",
   "devDependencies": {
     "mocha": "^2.1.0"
+  },
+  "dependencies": {
+    "node-uuid": "^1.4.2"
   }
 }
