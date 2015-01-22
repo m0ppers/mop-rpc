@@ -14,5 +14,8 @@
     "rpc"
   ],
   "author": "Andreas Streichardt <andreas.streichardt@gmail.com>",
-  "license": "UNLICENSE"
+  "license": "UNLICENSE",
+  "devDependencies": {
+    "mocha": "^2.1.0"
+  }
 }
