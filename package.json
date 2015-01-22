@@ -1,0 +1,18 @@
+{
+  "name": "mop-rpc",
+  "version": "0.0.1",
+  "description": "mop - my own protocol. a simple Websocket RPC protocol",
+  "directories": {
+    "test": "test"
+  },
+  "main": "MopRpc.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "websocket",
+    "rpc"
+  ],
+  "author": "Andreas Streichardt <andreas.streichardt@gmail.com>",
+  "license": "UNLICENSE"
+}
