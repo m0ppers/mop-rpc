@@ -2,16 +2,19 @@ var assert = require("assert");
 var MopRpc = require("../MopRpc");
 
 function ConnectionMock(cb) {
-    this.cb = cb;
+   this.cb = cb;
+   this.onmessageCb = undefined;
 }
 
 ConnectionMock.prototype = {
     send: function(data) {
         this.cb("send", data);
     },
+    onmessage: function(cb) {
+        this.onmessageCb = cb;
+    },
     fakeReceive: function(data) {
-        var parsed = JSON.parse(data);
-        this.onmessage({"type": "utf8", "utf8Data": JSON.stringify(parsed)});
+        this.onmessageCb(JSON.stringify(data));
     }
 }
 describe("Mop Rpc", function() {
@@ -48,17 +51,11 @@ describe("Mop Rpc", function() {
         mopRpc.send("test", undefined, function() {
         }, {"replyTimeout": null});
     });
-    it("should not fail if garbage is sent", function() {
-        var connectionMock = new ConnectionMock(function(type, rawMessage) {
-        });
-        var mopRpc = new MopRpc(connectionMock);
-        connectionMock.onmessage(undefined);
-    });
     it("should not fail if an invalid message format is sent", function() {
         var connectionMock = new ConnectionMock(function(type, rawMessage) {
         });
         var mopRpc = new MopRpc(connectionMock);
-        connectionMock.fakeReceive(JSON.stringify({}));
+        connectionMock.fakeReceive({});
     });
     it("should call a receivehandler if it has been installed", function(done) {
         var connectionMock = new ConnectionMock(function(type, rawMessage) {
@@ -70,7 +67,7 @@ describe("Mop Rpc", function() {
                 done();
             }
         });
-        connectionMock.fakeReceive(JSON.stringify({"type": "test", "payload": "test"}));
+        connectionMock.fakeReceive({"type": "test", "payload": "test"});
     });
     it("should not offer a replyFn if the sender does not expect a reply", function(done) {
         var connectionMock = new ConnectionMock(function(type, rawMessage) {
@@ -82,7 +79,7 @@ describe("Mop Rpc", function() {
                 done();
             }
         });
-        connectionMock.fakeReceive(JSON.stringify({"type": "test", "payload": "test"}));
+        connectionMock.fakeReceive({"type": "test", "payload": "test"});
     });
     it("should offer a replyFn if the sender expects one", function(done) {
         var connectionMock = new ConnectionMock(function(type, rawMessage) {
@@ -94,18 +91,18 @@ describe("Mop Rpc", function() {
                 done();
             }
         });
-        connectionMock.fakeReceive(JSON.stringify({"type": "test", "payload": "test", "id": 1}));
+        connectionMock.fakeReceive({"type": "test", "payload": "test", "id": 1});
     });
     it("should not fail when getting an unregistered reply", function() {
         var connectionMock = new ConnectionMock(function(type, rawMessage) {
         });
         var mopRpc = new MopRpc(connectionMock);
-        connectionMock.fakeReceive(JSON.stringify({"replyId": 1, "payload": "test", "id": 1}));
+        connectionMock.fakeReceive({"replyId": 1, "payload": "test", "id": 1});
     });
     it("should allow back and forth communication", function(done) {
         // mop: this is the "TALK TO THE HAND" test :D
         var connectionMock = new ConnectionMock(function(type, rawMessage) {
-            connectionMock.fakeReceive(rawMessage);
+            connectionMock.fakeReceive(JSON.parse(rawMessage));
         });
         var mopRpc = new MopRpc(connectionMock);
         mopRpc.setReceiveHandler({

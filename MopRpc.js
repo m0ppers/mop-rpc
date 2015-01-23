@@ -40,7 +40,7 @@ var bundleReply = function(message, replyFn, options) {
 
 function MopRpc(connection, options) {
     this.connection = connection;
-    this.connection.onmessage = this.receive.bind(this);
+    this.connection.onmessage(this.receive.bind(this));
     this.handler = {};
     this.receiveHandler = {};
     this.log = mopRpcLogger;
@@ -51,22 +51,9 @@ function MopRpc(connection, options) {
 
 MopRpc.prototype = {
     receive: function(rawMessage) {
-        if (typeof rawMessage != "object") {
-            this.log.error("Didn't get an object", rawMessage);
-            return;
-        }
-        if (rawMessage.type != "utf8") {
-            this.log.error("Message is not utf-8 but", rawMessage.type);
-            return;
-        }
-
-        if (typeof rawMessage.utf8Data != "string") {
-            this.log.error("Message is utf-8 but utf8Data not set", rawMessage);
-            return;
-        }
-        this.log.debug("Receiving", rawMessage.utf8Data);
+        this.log.debug("Receiving", rawMessage);
         try {
-            var parsed = JSON.parse(rawMessage.utf8Data);
+            var parsed = JSON.parse(rawMessage);
         } catch (e) {
             this.log.error("Message received is not json parseable!", e);
             return;
