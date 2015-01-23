@@ -14,7 +14,7 @@ module.exports = {
     "MopRpc": require("./MopRpc"),
     "mopRpcLogger": require("./mopRpcLogger"),
     // mop: whoa ... i am feeling really bad considering these names :S
-    "MopRpcConnectionAdapter": require("./MopRpcConnectionAdapter")
-    "MopRpcBrowserConnectionAdapter": MopRpcBrowserConnectionAdapter
+    "MopRpcConnectionAdapter": require("./MopRpcConnectionAdapter"),
+    "MopRpcBrowserConnectionAdapter": MopRpcBrowserConnectionAdapter,
     "MopRpcWebsocketConnectionAdapter": MopRpcWebsocketConnectionAdapter
 };
