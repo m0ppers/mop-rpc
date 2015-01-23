@@ -98,6 +98,7 @@ MopRpc.prototype = {
     send: function(type, payload, replyFn, options) {
         var message = {"type": type, "payload": payload};
         bundleReply.bind(this)(message, replyFn, options);
+        this.log.info("Sending", message);
         this.connection.send(JSON.stringify(message));
     },
 
