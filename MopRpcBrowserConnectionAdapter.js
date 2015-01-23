@@ -7,7 +7,9 @@ MopRpcBrowserConnectionAdapter.prototype = {
         this.connection.send(message);
     },
     onmessage: function(cb) {
-        this.connection.onmessage = cb;
+        this.connection.onmessage = function(messageEvent) {
+            cb(messageEvent.data);
+        }
     }
 }
 
