@@ -72,7 +72,7 @@ MopRpc.prototype = {
                 this.log.info("Message", parsed, "is expected and will be handled");
                 targetFn = this.receiveHandler[parsed.type];
             } else {
-                this.log.warn("Message", parsed, "is not extepected and will be discarded");
+                this.log.warn("Message", parsed, "is not expected and will be discarded");
             }
         } else {
             this.log.warn("Received garbage", parsed, "discarding");
